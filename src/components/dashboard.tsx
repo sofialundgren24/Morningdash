@@ -65,6 +65,10 @@ export function Dashboard() {
     setLinks((prev) => prev.filter((link) => link.id !== linkId));
   }
 
+  if (!mounted) {
+    return <div className="min-h-screen flex items-center justify-center">Laddar...</div>;
+  }
+
   
   return (
     <div className="relative min-h-screen overflow-hidden bg-blue-800">
