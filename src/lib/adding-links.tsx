@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import type { MorningLink } from "@/config/links";
+import { CategoryIcon, linkCategories } from "@/config/category-svg";
 import { Button } from "@/components/ui/button";
 
 export const colorOptions = [
@@ -18,6 +19,7 @@ type NewLinkForm = {
   url: string;
   description: string;
   color: string;
+  category: string;
 };
 
 const emptyForm: NewLinkForm = {
@@ -25,6 +27,7 @@ const emptyForm: NewLinkForm = {
   url: "",
   description: "",
   color: colorOptions[0].value,
+  category: linkCategories[0],
 };
 
 type AddLinkFormProps = {
@@ -55,6 +58,7 @@ export function handleAddLink(
     url: url.startsWith("http") ? url : `https://${url}`,
     description: form.description.trim() || undefined,
     color: form.color,
+    category: form.category,
     custom: true,
   };
 
@@ -119,6 +123,25 @@ export function AddLinkForm({ setLinks }: AddLinkFormProps) {
               </option>
             ))}
           </select>
+        </label>
+        <label className="block text-sm sm:col-span-2">
+          <span className="mb-1 block text-neutral-500">Category</span>
+          <div className="flex items-center gap-3">
+            <div className="flex size-11 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-white">
+              <CategoryIcon category={form.category} size={40} />
+            </div>
+            <select
+              value={form.category}
+              onChange={(e) => setForm((prev) => ({ ...prev, category: e.target.value }))}
+              className="w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-sm text-neutral-800 outline-none focus:border-rose-300 focus:ring-2 focus:ring-rose-200"
+            >
+              {linkCategories.map((category) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
+            </select>
+          </div>
         </label>
       </div>
       <Button type="submit" className="mt-3 w-full sm:w-auto">

@@ -5,6 +5,7 @@ export type MorningLink = {
   description?: string;
   color: string;
   custom?: boolean;
+  category?: string;
 };
 
 export const morningLinks: MorningLink[] = [
@@ -14,6 +15,7 @@ export const morningLinks: MorningLink[] = [
     url: "https://www.instagram.com",
     description: "Social media",
     color: "from-pink-500 to-rose-400",
+    category: "Social media",
   },
   {
     id: "aftonbladet",
@@ -21,6 +23,7 @@ export const morningLinks: MorningLink[] = [
     url: "https://www.aftonbladet.se",
     description: "News",
     color: "from-red-500 to-orange-400",
+    category: "News",
   },
   {
     id: "smhi",
@@ -28,6 +31,7 @@ export const morningLinks: MorningLink[] = [
     url: "https://www.smhi.se",
     description: "Weather",
     color: "from-sky-500 to-cyan-400",
+    category: "Weather",
   },
   {
     id: "mail",
@@ -35,6 +39,7 @@ export const morningLinks: MorningLink[] = [
     url: "https://mail.google.com",
     description: "Email",
     color: "from-violet-500 to-purple-400",
+    category: "Email",
   },
   {
     id: "calendar",
@@ -42,13 +47,15 @@ export const morningLinks: MorningLink[] = [
     url: "https://calendar.google.com",
     description: "Today's schedule",
     color: "from-amber-500 to-yellow-400",
+    category: "Calendar",
   },
   {
-    id: "spotify",
-    label: "Spotify",
-    url: "https://open.spotify.com",
-    description: "Morning music",
-    color: "from-emerald-500 to-green-400",
+    id: "duolingo",
+    label: "Duolingo",
+    url: "https://sv.duolingo.com/",
+    description: "Daily language learning",
+    color: "from-emerald-500 to-green-500",
+    category: "Education",
   },
   
 ];

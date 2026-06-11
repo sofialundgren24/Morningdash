@@ -1,7 +1,8 @@
 "use client";
 
-import { Check, X } from "lucide-react";
+import { X } from "lucide-react";
 import type { MorningLink } from "@/config/links";
+import { CategoryIcon } from "@/config/category-svg";
 import {
   formatTimeRemaining,
   getTimeUntilReset,
@@ -41,23 +42,20 @@ export function LinkItem({ link, visits, onVisit, onDelete }: LinkItemProps) {
         type="button"
         onClick={handleClick}
         className={cn(
-          "group relative flex w-full items-center gap-4 rounded-4xl p-5 text-left transition-all duration-300 min-h-30",
+          "group relative flex w-full items-center gap-4 rounded-4xl p-2 text-left transition-all duration-300 min-h-20",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent",
           visited
             ? "bg-neutral-200/80 text-neutral-500 shadow-none hover:bg-neutral-300/80"
             : cn(
-                "bg-gradient-to-br text-white shadow-lg hover:scale-[1.02] hover:shadow-xl active:scale-[0.98]",
+                "bg-gradient-to-br text-white hover:scale-[1.02] hover:shadow-xl active:scale-[0.98]",
                 link.color
               )
         )}
       >
         <div
-          className={cn(
-            "flex size-10 shrink-0 items-center justify-center rounded-xl text-lg font-bold",
-            visited ? "bg-neutral-300/60 text-neutral-500" : "bg-white/20"
-          )}
+          
         >
-          {visited ? <Check className="size-5" strokeWidth={2.5} /> : link.label[0]}
+          <CategoryIcon category={link.category} size={120} visited={visited} />
         </div>
 
         <div className="min-w-0 flex-1">
@@ -87,7 +85,7 @@ export function LinkItem({ link, visits, onVisit, onDelete }: LinkItemProps) {
             "absolute top-3 right-3 flex size-7 items-center justify-center rounded-full transition-colors",
             visited
               ? "bg-neutral-300/80 text-neutral-600 hover:bg-neutral-400/80"
-              : "bg-black/20 text-white hover:bg-black/30"
+              : "bg-white/20 text-white hover:bg-white/30"
           )}
         >
           <X className="size-4" strokeWidth={2.5} />
