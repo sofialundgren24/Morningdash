@@ -1,25 +1,32 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { morningLinks } from "@/config/links";
+import type { MorningLink } from "@/config/links";
+import {
+  getMorningLinks,
+  saveMorningLinks,
+} from "@/lib/morning-links-storage";
 import {
   getVisits,
   isVisitedWithin24h,
   type VisitRecord,
 } from "@/lib/visited-links";
+import { AddLinkForm } from "@/lib/adding-links";
 import { LinkItem } from "@/components/link-item";
 import { cn } from "@/lib/utils";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Plus } from "lucide-react";
 
 function getGreeting(): string {
   const hour = new Date().getHours();
-  if (hour < 10) return "God morgon";
-  if (hour < 12) return "God förmiddag";
-  if (hour < 18) return "God eftermiddag";
-  return "God kväll";
+  if (hour < 10) return "Good morning";
+  if (hour < 12) return "Good late morning";
+  if (hour < 18) return "Good afternoon";
+  return "Good evening";
 }
 
 function formatDate(): string {
-  return new Date().toLocaleDateString("sv-SE", {
+  return new Date().toLocaleDateString("en-US", {
     weekday: "long",
     day: "numeric",
     month: "long",
@@ -27,32 +34,41 @@ function formatDate(): string {
 }
 
 export function Dashboard() {
+  const [links, setLinks] = useState<MorningLink[]>([]);
   const [visits, setVisits] = useState<VisitRecord>({});
   const [mounted, setMounted] = useState(false);
+  
 
   useEffect(() => {
+    setLinks(getMorningLinks());
     setVisits(getVisits());
     setMounted(true);
   }, []);
 
-  const visitedCount = morningLinks.filter((link) =>
+  useEffect(() => {
+    if (!mounted) return;
+    saveMorningLinks(links);
+  }, [links, mounted]);
+
+  const visitedCount = links.filter((link) =>
     isVisitedWithin24h(link.id, visits)
   ).length;
-  const totalCount = morningLinks.length;
+  const totalCount = links.length;
   const progress = totalCount > 0 ? (visitedCount / totalCount) * 100 : 0;
-  const allDone = visitedCount === totalCount;
+  const allDone = totalCount > 0 && visitedCount === totalCount;
 
   function handleVisit(linkId: string) {
     setVisits((prev) => ({ ...prev, [linkId]: Date.now() }));
   }
 
+  function handleDeleteLink(linkId: string) {
+    setLinks((prev) => prev.filter((link) => link.id !== linkId));
+  }
+
+  
   return (
     <div className="relative min-h-screen overflow-hidden">
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-orange-100 via-rose-50 to-sky-100" />
-      <div className="pointer-events-none absolute -left-32 -top-32 size-96 rounded-full bg-pink-300/30 blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-32 -right-32 size-96 rounded-full bg-sky-300/30 blur-3xl" />
-      <div className="pointer-events-none absolute right-1/4 top-1/3 size-64 rounded-full bg-amber-200/40 blur-3xl" />
-
+      
       <main className="relative mx-auto flex min-h-screen max-w-lg flex-col px-6 py-12">
         <header className="mb-10 text-center">
           <p className="mb-1 text-sm font-medium uppercase tracking-widest text-rose-400/80">
@@ -61,17 +77,39 @@ export function Dashboard() {
           <h1 className="text-4xl font-bold tracking-tight text-neutral-800">
             {getGreeting()} 
           </h1>
-          <p className="mt-2 text-neutral-500">Din morgonrutin</p>
+          <p className="mt-2 text-neutral-500">Your morning routine</p>
         </header>
+
+        <div className="mb-8 flex justify-center">
+          <Dialog>
+            <DialogTrigger
+              className={cn(
+                "group flex size-14 items-center justify-center rounded-full",
+                "bg-gradient-to-br from-rose-400 via-amber-400 to-sky-400 text-white shadow-lg shadow-rose-200/50",
+                "ring-4 ring-white/80 transition-all duration-200",
+                "hover:scale-105 hover:shadow-xl hover:shadow-rose-300/60 active:scale-95",
+                "focus-visible:outline-none focus-visible:ring-rose-300"
+              )}
+            >
+              <Plus className="size-7 stroke-[2.5] transition-transform group-hover:rotate-90" />
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Add new link</DialogTitle>
+              </DialogHeader>
+              <AddLinkForm setLinks={setLinks} />
+            </DialogContent>
+          </Dialog>
+        </div>
 
         <div className="mb-8">
           <div className="mb-2 flex items-center justify-between text-sm">
             <span className="font-medium text-neutral-600">
               {mounted ? (
                 allDone ? (
-                  <span className="text-emerald-600">Allt klart för idag! 🎉</span>
+                  <span className="text-emerald-600">All done for today</span>
                 ) : (
-                  `${visitedCount} av ${totalCount} besökta`
+                  `${visitedCount} of ${totalCount} visited`
                 )
               ) : (
                 "\u00a0"
@@ -85,26 +123,27 @@ export function Dashboard() {
                 "h-full rounded-full transition-all duration-500",
                 allDone
                   ? "bg-gradient-to-r from-emerald-400 to-green-400"
-                  : "bg-gradient-to-r from-rose-400 via-amber-400 to-sky-400"
+                  : "bg-blue-300"
               )}
               style={{ width: mounted ? `${progress}%` : "0%" }}
             />
           </div>
         </div>
 
-        <nav className="flex flex-col gap-3" aria-label="Morgonlänkar">
-          {morningLinks.map((link) => (
+        <nav className="grid md:grid-cols-2 gap-3 grid-cols-1" aria-label="Morning links">
+          {links.map((link) => (
             <LinkItem
               key={link.id}
               link={link}
               visits={visits}
               onVisit={handleVisit}
+              onDelete={handleDeleteLink}
             />
           ))}
         </nav>
 
         <p className="mt-10 text-center text-xs text-neutral-400">
-          Besökta länkar blir grå i 24 timmar
+          Visited links turn gray for 24 hours
         </p>
       </main>
     </div>
