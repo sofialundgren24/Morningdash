@@ -77,7 +77,7 @@ export function Dashboard() {
           <h1 className="text-4xl font-bold tracking-tight text-neutral-800">
             {getGreeting()} 
           </h1>
-          <p className="mt-2 text-neutral-500">Check of all your must do's</p>
+         
         </header>
 
         <div className="mb-8 flex justify-center">
