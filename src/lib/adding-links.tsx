@@ -144,7 +144,7 @@ export function AddLinkForm({ setLinks }: AddLinkFormProps) {
           </div>
         </label>
       </div>
-      <Button type="submit" className="mt-3 w-full sm:w-auto">
+      <Button type="submit" className="mt-3 w-full sm:w-auto bg-green-500">
         Add link
       </Button>
     </form>

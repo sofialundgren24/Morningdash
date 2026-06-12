@@ -71,17 +71,17 @@ export function Dashboard() {
 
   
   return (
-    <div className="relative min-h-screen overflow-hidden bg-blue-800">
+    <div className="relative min-h-screen overflow-hidden bg-white">
       
       <main className="relative mx-auto flex min-h-screen max-w-2xl flex-col px-6 py-12">
         <header className="mb-10 text-center">
           <p className="mb-1 text-sm font-medium uppercase tracking-widest text-gray-400/80">
             {mounted ? formatDate() : "\u00a0"}
           </p>
-          <h1 className="text-4xl font-bold tracking-tight text-neutral-800">
+          <h1 className="text-4xl font-bold tracking-tight text-gray-600/80 ">
             {getGreeting()} 
           </h1>
-         
+      
         </header>
 
         <div className="mb-8 flex justify-center">
@@ -89,13 +89,13 @@ export function Dashboard() {
             <DialogTrigger
               className={cn(
                 "group flex size-14 items-center justify-center rounded-full",
-                "bg-green-300",
-                "ring-4 ring-white/80 transition-all duration-200",
-                "hover:scale-105 hover:shadow-xl hover:shadow-rose-300/60 active:scale-95",
+                "bg-gray-300",
+                
+                "hover:scale-105 active:scale-95",
                 "focus-visible:outline-none focus-visible:ring-rose-300"
               )}
             >
-              <Plus className="size-7 stroke-[2.5] transition-transform group-hover:rotate-90" />
+              <Plus className="size-7 stroke-[2.5] text-gray-600 transition-transform group-hover:rotate-90" />
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
@@ -108,7 +108,7 @@ export function Dashboard() {
 
         <div className="mb-8">
           <div className="mb-2 flex items-center justify-between text-sm">
-            <span className="font-medium text-neutral-600">
+            <span className="font-medium text-gray-600">
               {mounted ? (
                 allDone ? (
                   <span className="text-emerald-600">All done for today</span>
